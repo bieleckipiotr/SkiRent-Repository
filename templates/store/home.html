@@ -1,0 +1,45 @@
+{% extends "./base.html" %}
+{% load static %}
+{% block title %}Home{% endblock %}
+
+{% block content %}
+    <main>
+
+        <div class="lead">
+            <div>
+                <div class="lead title">
+                    <h1>Rent, Ski, Have Fun</h1>
+                    <p class="lead text-muted">We're a small ski rent company with the aim
+                        to enable every willing person to go skiing</p>
+                    <p>
+                        <a href="{% url "account:register" %}">Make an account</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="container">
+            {% for product in products %}
+
+                <div class="item">
+                    <a href="{{ product.get_absolute_url }}">
+                        <img src="{{ product.image.url }}">
+                    </a>
+                    <div class="description">
+                        <p class="item-text">
+                            <a href="{{ product.get_absolute_url }}">{{ product.name }}</a>
+                        </p>
+                        <div>
+                            <small class="text-muted">{{ product.description|truncatechars:255 }}</small>
+                        </div>
+                    </div>
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+
+    </main>
+{% endblock %}

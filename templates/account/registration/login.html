@@ -1,0 +1,44 @@
+{% extends "../../store/base.html" %}
+{% block title %} Log-in {% endblock %}
+{% block content %}
+    <main>
+        <form class="account-form" action="{% url 'account:login' %}" method="post">
+            <div style="display: grid; max-width: 400px; margin: auto; width: 300px;">
+                {% csrf_token %}
+                <h3 class="">Sign In</h3>
+
+                <div class="popup" id="popup">
+                    <div role="alert">
+                        Error: Username or Password not correct!
+                    </div>
+                </div>
+
+                <label>{{ form.username.label }}</label>
+                {{ form.username }}
+
+                <label>{{ form.password.label }}</label>
+                {{ form.password }}
+                <div>
+                    <input type="hidden" name="next" value="{{ next }}">
+                    <button type="submit" value="Log-in">Sign in
+                    </button>
+                </div>
+                <p>
+                    <a href="{% url "account:register" %}">Create an account</a>
+                </p>
+            </div>
+        </form>
+        <p><a href="{% url "account:pwdreset" %}">Forgotten Password?</a>
+        </p>
+    </main>
+    <script>
+        $(document).ready(function () {
+            {% if form.errors %}
+                console.log("errors")
+                document.getElementById("popup").style.display = "block";
+            {% else %}
+                document.getElementById("popup").style.display = "none";
+            {% endif %}
+        })
+    </script>
+{% endblock %}

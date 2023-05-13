@@ -1,0 +1,91 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{% block title %}Ski Rental{% endblock %}</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="{% static "css/optimised2.css" %}" rel="stylesheet">
+    <link rel="icon" href="{% static "logo/logo.png" %} ">
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script type="text/javascript">
+        window.CSRF_TOKEN = "{{ csrf_token }}";
+        url_add = "{% url "basket:basket_add" %}";
+        url_del = "{% url "basket:basket_delete" %}";
+        url_upd = "{% url "basket:basket_update" %}";
+    </script>
+    <script src="{% static "js/details.js" %}"></script>
+</head>
+<body>
+<header>
+    <nav>
+        <div class="dropdown-icon">
+            <button class="dropdown-button"><i class="fa fa-bars"></i></button>
+        </div>
+        <div class="nav-left">
+            <div class="nav-collapsible">
+                <a href="/"><img src="{% static "logo/logo.png" %}" alt="Ski Rental"/></a>
+            </div>
+            <div class="dropdown nav-collapsible">
+                <button class="dropbtn">Shop</button>
+                <ul class="dropdown-content">
+                    <li><a class="nav-left-a" href="{% url "store:all_products" %}">All</a></li>
+                    {% for c in categories %}
+                        <li {% if category.slug == c.slug %}class="selected" {% endif %}>
+                            <a class="nav-left-a" href="{{ c.get_absolute_url }}">{{ c.name|title }}</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div id="basket-nav" class="nav-collapsible">
+                <a href="{% url "basket:basket_summary" %}">
+                    {% with total_qty=basket|length %}
+                        <div id="basket-qty"
+                             style="float: left; margin: 18px 0 18px 18px;color: black;font-size: 20px;">
+                        {% if total_qty > 0 %}
+                            {{ total_qty }}
+                        {% else %}
+                            0
+                        {% endif %}
+
+                    {% endwith %}
+                    </div>
+                    <i href="/" class="fa fa-shopping-cart" style="font-size:30px"></i>
+                </a>
+            </div>
+        </div>
+        <div class="nav-right">
+        <div>
+            {% if user.is_authenticated %}
+                <a type="button" role="button" href="{% url "account:logout" %}?next={% url "account:login" %}">
+                    <i class="fa fa-sign-out" style="font-size: 30px"></i>
+                </a>
+                <a type="button" role="button" href="{% url "account:dashboard" %}">
+                    <i class="fa fa-user" style="font-size: 30px"></i>
+                </a>
+            {% else %}
+                <a type="button" role="button" href="{% url "account:login" %}">
+                    <i class="fa fa-sign-in" style="font-size: 30px"></i>
+                </a>
+            {% endif %}
+        </div>
+            <div class="nav-collapsible">
+                <form class="search-form">
+                    <label>
+                        <input class="search-input" type="search" placeholder="Search"/>
+                    </label>
+                    <button class="submit-button" type="submit"><span class="fa fa-search"></span></button>
+                </form>
+            </div>
+        </div>
+
+    </nav>
+</header>
+<div id="greeting">{% block greeting %}{% endblock %}</div>
+<div id="content">{% block content %} {% endblock %}</div>
+</body>
+</html>
+

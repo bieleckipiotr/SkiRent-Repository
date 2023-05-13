@@ -1,0 +1,56 @@
+{% extends "../../store/base.html" %}
+{% block title %} Register {% endblock %}
+
+{% block content %}
+    <main>
+        <form class="account-form" action="." method="post">
+            {% csrf_token %}
+            <div class="centerdiv">
+                <h3>Create an account</h3>
+                <p>It's free and only takes a minute.</p>
+                <div class="popup" id="popup">
+                    <p>Please correct the following errors:</p>
+                    {% for field in form %}
+                        {% if field.errors %}
+                            <div role="alert">
+                                {{ field.label }}: {{ field.errors|striptags }}
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                <label>{{ form.user_name.label }}<span>
+                                        <small class="text-muted">(Required)</small></span></label>
+                {{ form.user_name }}
+                <label>{{ form.email.label }}<span>
+                                        <small class="text-muted">(Required)</small></span></label>
+                {{ form.email }}
+                <label>{{ form.password.label }}<span>
+                                        </span></label>
+                <small class="text-muted">
+                    At least 8 characters and 1 digit
+                </small>
+                {{ form.password }}
+                <label>{{ form.password2.label }}<span>
+                <small class="text-muted">(Required)</small></span></label>
+                {{ form.password2 }}
+                <button type="submit">
+                    Register
+                </button>
+                <p>
+                    <a href="">Already have an account?</a>
+                </p>
+            </div>
+        </form>
+    </main>
+
+    <script>
+        $(document).ready(function () {
+            {% if form.errors %}
+                console.log("errors")
+                document.getElementById("popup").style.display = "block";
+            {% else %}
+                document.getElementById("popup").style.display = "none";
+            {% endif %}
+        })
+    </script>
+{% endblock %}
